@@ -1,0 +1,37 @@
+matrix:
+  NAME:
+    - ukhomeofficedigital/dsa-confluence
+  DOCKER_REPO:
+    - quay.io
+  DOCKER_USERNAME:
+    - ukhomeofficedigital+dsa_image_build
+pipeline:
+  docker-build:
+    image: docker
+    environment:
+      - DOCKER_HOST=tcp://172.17.0.1:2375
+    commands:
+      - docker build -t ${DOCKER_REPO}/${NAME}:$${DRONE_COMMIT_SHA} .
+    when:
+      event:
+        - pull_request
+        - push
+      branch:
+        - [ feature/* ]
+
+  docker-push:
+    image: docker
+    secrets:
+      - docker_password
+    environment:
+      - DOCKER_HOST=tcp://172.17.0.1:2375
+    commands:
+      - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} ${DOCKER_REPO}
+      - docker tag ${DOCKER_REPO}/${NAME}:$${DRONE_COMMIT_SHA} ${DOCKER_REPO}/${NAME}:latest
+      - docker push ${DOCKER_REPO}/${NAME}:$${DRONE_COMMIT_SHA}
+      - docker push ${DOCKER_REPO}/${NAME}:latest
+    when:
+      event: 
+        - push
+      branch:
+        - master
