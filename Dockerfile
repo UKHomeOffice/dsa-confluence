@@ -9,13 +9,13 @@ LABEL maintainer="kaz@praqma.net heh@praqma.net"
 
 # **Note:** Being an OS image, Fedora runs as 'root'; and has '/' as it's default WORKDIR.
 
-# This Dockerfile builds a container image for Atlassian Confluence, using 
+# This Dockerfile builds a container image for Atlassian Confluence, using
 #   atlassian-confluence-*.bin installer. The advantage of using the bin-installer is
-#   that it includes OracleJDK (now AdoptJRE). We do not have to depend on Oracle Java 
+#   that it includes OracleJDK (now AdoptJRE). We do not have to depend on Oracle Java
 #   or manage it in our image. Big relief!
 #
-# Since this container image contains OracleJDK, we can not (re)distribute it 
-#   as binary image, because of licensing issues. Though mentioning it in 
+# Since this container image contains OracleJDK, we can not (re)distribute it
+#   as binary image, because of licensing issues. Though mentioning it in
 #   Dockerfile is ok.
 #
 
@@ -28,7 +28,7 @@ LABEL maintainer="kaz@praqma.net heh@praqma.net"
 # CONFLUENCE_VERSION:
 # ------------------
 # The value for CONFLUENCE_VERSION should be a version number, which is part of the name of the confluence software bin/tarball/zip.
-ENV CONFLUENCE_VERSION 7.3.5
+ENV CONFLUENCE_VERSION=7.3.5
 
 # OS_USERNAME:
 # -----------
@@ -88,7 +88,7 @@ ENV JAVA_HOME /opt/atlassian/confluence/jre
 ENV CATALINA_OPTS "-Dfile.encoding=UTF-8 -Xms1024m -Xmx1024m"
 
 # ENABLE_CERT_IMPORT:
-# ------------------ 
+# ------------------
 # Allow import of user defined (self-signed) certificates.
 ENV ENABLE_CERT_IMPORT false
 
@@ -101,8 +101,8 @@ ENV SSL_CERTS_PATH /var/atlassian/ssl
 
 # DATACENTER_MODE:
 # ----------------
-# This needs to be set to true if you want to setup Confluence in a data-center mode, using multiple confluence instances. 
-#   This can stay set as false, if you are running a standalone confluence (server) instance. 
+# This needs to be set to true if you want to setup Confluence in a data-center mode, using multiple confluence instances.
+#   This can stay set as false, if you are running a standalone confluence (server) instance.
 #   This has no effect on the role of your confluence instance; which may be 'test' or 'production'.
 ENV DATACENTER_MODE false
 
@@ -119,8 +119,8 @@ ENV CONFLUENCE_DATACENTER_SHARE /mnt/shared
 # ----------------
 # Comma separated list of cluster peer IPs in datacenter mode.
 # This is set automatically when run in Kuberenetes. No need to bother about it in Kubernetes.
-# This 'needs' to be set if confluence is run on plain docker host in data-center mode. 
-#   In that case, we need to pass it the IP addresses of the "peer" nodes - as ENV vars, 
+# This 'needs' to be set if confluence is run on plain docker host in data-center mode.
+#   In that case, we need to pass it the IP addresses of the "peer" nodes - as ENV vars,
 #    and not the IP of this node itself.
 # If you are running confluence as standalone, you don't need to bother about it.
 
@@ -165,7 +165,7 @@ ENV CONFLUENCE_DATACENTER_SHARE /mnt/shared
 
 # Internaltionalization / i18n - Notes on OS settings (Fedora):
 # ------------------------------------------------------------
-# Note the file '/etc/sysconfig/i18n' does not exist by default. 
+# Note the file '/etc/sysconfig/i18n' does not exist by default.
 # echo -e "LANG=\"en_US.UTF-8\" \n LC_ALL=\"en_US.UTF-8\"" > /etc/sysconfig/i18n
 # echo -e "LANG=\"en_US.UTF-8\" \n LC_ALL=\"en_US.UTF-8\"" > /etc/locale.conf
 
