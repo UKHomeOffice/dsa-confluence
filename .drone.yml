@@ -17,8 +17,7 @@ steps:
   - docker build -t quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} .
   environment:
    # DOCKER_HOST: tcp://172.17.0.1:2375
-    DOCKER_USERNAME: 
-      - ukhomeofficedigital+dsa_image_build
+    DOCKER_USERNAME: ukhomeofficedigital+dsa_image_build
     DOCKER_PASSWORD:
       from_secret: docker_password
   when:
