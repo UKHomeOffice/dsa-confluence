@@ -16,7 +16,7 @@ steps:
   - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
   - docker build -t quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} .
   environment:
-    DOCKER_SERVER: tcp://172.17.0.1:2375
+#    DOCKER_SERVER: tcp://172.17.0.1:2375
     DOCKER_USERNAME:
       from_secret: docker_username
     DOCKER_PASSWORD:
@@ -37,7 +37,7 @@ steps:
   - docker push quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA}
   - docker push quay.io/ukhomeofficedigital/dsa-confluence:latest
   environment:
-    DOCKER_HOST: tcp://172.17.0.1:2375
+#    DOCKER_HOST: tcp://172.17.0.1:2375
     DOCKER_USERNAME:
       from_secret: docker_username
     DOCKER_PASSWORD:
