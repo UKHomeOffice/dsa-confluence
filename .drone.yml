@@ -1,6 +1,7 @@
 ---
 kind: pipeline
-name: matrix-1
+name: default
+type: kubernetes
 
 platform:
   os: linux
@@ -9,7 +10,7 @@ platform:
 steps:
 - name: docker-build
   pull: if-not-exists
-  image: docker
+  image: plugins/docker
   commands:
   - docker build -t quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} .
   environment:
@@ -21,7 +22,7 @@ steps:
 
 - name: docker-push
   pull: if-not-exists
-  image: docker
+  image: plugins/docker
   commands:
   - docker login -u="$ukhomeofficedigital+dsa_image_build" -p=$${DOCKER_PASSWORD} quay.io
   - docker tag quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/dsa-confluence:latest
@@ -36,5 +37,4 @@ steps:
     - master
     event:
     - push
-
 ...
