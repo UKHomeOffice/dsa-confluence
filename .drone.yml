@@ -14,7 +14,7 @@ steps:
   commands:
   # wait for docker service to be up before running docker build
   - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
-  - docker build -t quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} .
+  - docker build -t quay.io/ukhomeofficedigital/dsa-confluence:test-$${DRONE_COMMIT_SHA} .
   environment:
 #    DOCKER_SERVER: tcp://172.17.0.1:2375
     DOCKER_PASSWORD:
