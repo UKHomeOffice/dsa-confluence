@@ -10,7 +10,7 @@ platform:
 steps:
 - name: docker-build
   pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind 
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   commands:
   # wait for docker service to be up before running docker build
   - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
@@ -24,7 +24,29 @@ steps:
     - pull_request
     - push
 
-- name: docker-push
+    - name: docker-dev-push
+      pull: if-not-exists
+      image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+      commands:
+      # wait for docker service to be up before running docker build
+      - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
+      - docker login -u=$${DOCKER_USERNAME} -p=$${DOCKER_PASSWORD} quay.io
+      - docker tag quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/dsa-confluence:dev-latest
+      - docker push quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA}
+      - docker push quay.io/ukhomeofficedigital/dsa-confluence:dev-latest
+      environment:
+    #    DOCKER_HOST: tcp://172.17.0.1:2375
+        DOCKER_USERNAME:
+          from_secret: docker_username
+        DOCKER_PASSWORD:
+          from_secret: docker_password
+      when:
+        branch:
+        - development
+        event:
+        - push
+
+- name: docker-prod-push
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   commands:
