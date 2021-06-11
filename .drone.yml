@@ -44,6 +44,7 @@ steps:
     branch:
      exclude:
      - master
+    event:
      - push
 
 - name: docker-prod-push
