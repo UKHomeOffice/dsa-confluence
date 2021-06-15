@@ -42,10 +42,10 @@ steps:
       from_secret: docker_password
   when:
     branch:
-     exclude:
-     - master
+    exclude:
+    - master
     event:
-     - push
+    - push
 
 - name: docker-prod-push
   pull: if-not-exists
