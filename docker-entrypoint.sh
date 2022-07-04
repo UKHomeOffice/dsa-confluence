@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 
 # Check if CONFLUENCE_HOME and CONFLUENCE INSTALL variable are found in ENV.
 if [ -z "${CONFLUENCE_HOME}" ] || [ -z "${CONFLUENCE_INSTALL}" ]; then
@@ -278,4 +278,4 @@ echo "Finished running entrypoint script(s). Now executing: $@  ..."
 echo
 
 # Execute the CMD from the Dockerfile:
-exec "$@"
+exec "$@" 

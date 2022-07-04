@@ -1,76 +1,35 @@
 ---
 kind: pipeline
-name: default
+name: dsa-Confluence
 type: kubernetes
 
 platform:
   os: linux
   arch: amd64
 
-steps:
-- name: docker-build
-  pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-  commands:
-  # wait for docker service to be up before running docker build
-  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
-  - docker build -t quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} .
-  environment:
-#    DOCKER_SERVER: tcp://172.17.0.1:2375
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-  when:
-    event:
-    - pull_request
-    - push
+steps:  
+- name: push_to_ecr
+  image: plugins/ecr
+  pull: always
+  settings:
+    access_key:
+      from_secret: AWS_ACCESS_KEY_ID
+    secret_key:
+      from_secret: AWS_SECRET_ACCESS_KEY
+    repo: dsa/confluence
+    registry: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
+    region: eu-west-2
+    create_repository: false
+    build_args:
+    - APP_BUILD=${DRONE_COMMIT_SHA}
+    - DOCKER_HOST=tcp://172.17.0.1:2375
+    - CONFLUENCE_VERSION=7.13.7
+    tags:
+    - 7.13.7
+    - ${DRONE_COMMIT_SHA}
 
-- name: docker-dev-push
-  pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-  commands:
-  # wait for docker service to be up before running docker build
-  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
-  - docker login -u=$${DOCKER_USERNAME} -p=$${DOCKER_PASSWORD} quay.io
-  - docker tag quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/dsa-confluence:dev-latest
-  - docker push quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA}
-  - docker push quay.io/ukhomeofficedigital/dsa-confluence:dev-latest
-  environment:
-#    DOCKER_HOST: tcp://172.17.0.1:2375
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-  when:
-    branch:
-    exclude:
-    - master
-    event:
-    - push
-
-- name: docker-prod-push
-  pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-  commands:
-  # wait for docker service to be up before running docker build
-  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
-  - docker login -u=$${DOCKER_USERNAME} -p=$${DOCKER_PASSWORD} quay.io
-  - docker tag quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA} quay.io/ukhomeofficedigital/dsa-confluence:latest
-  - docker push quay.io/ukhomeofficedigital/dsa-confluence:$${DRONE_COMMIT_SHA}
-  - docker push quay.io/ukhomeofficedigital/dsa-confluence:latest
-  environment:
-#    DOCKER_HOST: tcp://172.17.0.1:2375
-    DOCKER_USERNAME:
-      from_secret: docker_username
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-  when:
-    branch:
-    - master
-    event:
-    - push
-
-services:
-- name: docker
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-
-...
+trigger:
+  branch:
+  - dev
+  event:
+  - push  
