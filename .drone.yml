@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: dsa-Confluence
+name: dsa-confluence
 type: kubernetes
 
 platform:
