@@ -1,4 +1,4 @@
-FROM fedora:30
+ FROM fedora:30
 
 LABEL maintainer="kaz@praqma.net heh@praqma.net"
 
@@ -28,7 +28,8 @@ LABEL maintainer="kaz@praqma.net heh@praqma.net"
 # CONFLUENCE_VERSION:
 # ------------------
 # The value for CONFLUENCE_VERSION should be a version number, which is part of the name of the confluence software bin/tarball/zip.
-ENV CONFLUENCE_VERSION=7.13.0
+# ENV CONFLUENCE_VERSION=7.13.19
+ARG CONFLUENCE_VERSION
 
 # OS_USERNAME:
 # -----------
@@ -206,7 +207,8 @@ COPY confluence-response.varfile /tmp/
 ENV CONFLUENCE_DOWNLOAD_LOCATION https://www.atlassian.com/software/confluence/downloads/binary
 
 
-RUN  echo -e "LANG=\"en_US.UTF-8\" \n LC_ALL=\"en_US.UTF-8\"" > /etc/sysconfig/i18n \
+RUN  set -x \
+  && echo -e "LANG=\"en_US.UTF-8\" \n LC_ALL=\"en_US.UTF-8\"" > /etc/sysconfig/i18n \
   && echo -e "LANG=\"en_US.UTF-8\" \n LC_ALL=\"en_US.UTF-8\"" > /etc/locale.conf \
   && yum -y install xmlstarlet findutils which gzip hostname procps iputils bind-utils \
                     iproute jq graphviz graphviz-gd dejavu-sans-fonts busybox \
@@ -291,4 +293,4 @@ CMD ["/opt/atlassian/confluence/bin/start-confluence.sh", "-fg"]
 # End of Dockerfile.
 #
 #
-########################################### END - Build the image ###############################################
+########################################### END - Build the image ############################################### 
