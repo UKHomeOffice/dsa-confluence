@@ -65,7 +65,7 @@ ENV CONFLUENCE_INSTALL /opt/atlassian/confluence
 # Actual management of timezone is handled in the docker-entrypoint.sh,
 #   but it is important for it to specidied in image, or passed to the container.
 # TimeZone is set in a non-so-straightforward way, for certain reason.
-ENV TZ_FILE "/usr/share/zoneinfo/Europe/Oslo"
+ENV TZ_FILE "/usr/share/zoneinfo/Europe/London"
 
 # JAVA_HOME:
 # ---------
