@@ -23,9 +23,9 @@ steps:
     build_args:
     - APP_BUILD=${DRONE_COMMIT_SHA}
     - DOCKER_HOST=tcp://172.17.0.1:2375
-    - CONFLUENCE_VERSION=7.13.8
+    - CONFLUENCE_VERSION=7.13.20
     tags:
-    - 7.13.8
+    - 7.13.20
     - ${DRONE_COMMIT_SHA}
 
 trigger:
