@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 
 # Check if CONFLUENCE_HOME and CONFLUENCE INSTALL variable are found in ENV.
 if [ -z "${CONFLUENCE_HOME}" ] || [ -z "${CONFLUENCE_INSTALL}" ]; then
