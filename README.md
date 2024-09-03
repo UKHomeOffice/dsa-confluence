@@ -1,7 +1,7 @@
 # dsa-confluence
 
 This repo houses the Docker Build image for DSA Confluence. Any changes made to the Dockerfile are automatically pushed to ECR via a Drone pipeline.
-The current version of Confluence is 7.13.8.
+The current version of Confluence is 8.5.15.
 In order to upgrade to a new version of Confluence, update the drone.yml file as shown below
 ```yaml
 steps:  
@@ -20,9 +20,9 @@ steps:
     build_args:
     - APP_BUILD=${DRONE_COMMIT_SHA}
     - DOCKER_HOST=tcp://172.17.0.1:2375
-    - CONFLUENCE_VERSION=7.13.20 #New version here 
+    - CONFLUENCE_VERSION=8.5.15 #New version here 
     tags:
-    - 7.13.20 #New version here 
+    - 8.5.15 #New version here 
     - ${DRONE_COMMIT_SHA}
 
 ```
